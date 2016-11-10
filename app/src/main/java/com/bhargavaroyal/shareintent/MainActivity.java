@@ -5,6 +5,7 @@ import java.io.File;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ShareCompat;
 import android.view.View;
 import android.app.Activity;
 import android.content.Intent;
@@ -40,16 +41,25 @@ public class MainActivity extends Activity {
 
     // Method to share either text or URL.
     private void shareTextUrl() {
-        Intent share = new Intent(android.content.Intent.ACTION_SEND);
-        share.setType("text/plain");
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
-        // Add data to the intent, the receiving app will decide
-        // what to do with it.
-        share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
-        share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
+        String  shareHtmlText ="http://www.codeofaninja.com";
+        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/html")
+                .setHtmlText(shareHtmlText)
+                .setSubject("Definitely read this")
+//                .addEmailTo(importantPersonEmailAddress)
+                .getIntent();
 
-        startActivity(Intent.createChooser(share, "Share link!"));
+//        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+//        share.setType("text/plain");
+//        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//
+//        // Add data to the intent, the receiving app will decide
+//        // what to do with it.
+//        share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
+//        share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
+        if (shareIntent.resolveActivity(getPackageManager()) != null){
+            startActivity(Intent.createChooser(shareIntent, "Share link!"));}
     }
 
 
